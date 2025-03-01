@@ -1,0 +1,18 @@
+api_login_check:
+    path: /api/login_check
+
+create_new_user:
+    path: /login/create_new_user
+    controller: App\Controller\Login::CreateUserAction
+    methods: [POST]
+
+custom_token:
+    path: /login/custom_token
+    controller: App\Controller\Login::CustomInformationToken
+    methods: [GET]
+
+api_profile:            # <-- route name
+    path: /api/profile  # <-- the path users will hit in the browser/client
+    controller: App\Controller\Profile::me
+    methods: [GET]      # optional but recommended to restrict the method
+
