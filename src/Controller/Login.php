@@ -8,17 +8,19 @@ use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Login extends AbstractController{
     public function CreateUserAction(
         Request $request,
         EntityManagerInterface $em,
-        UserPasswordHasherInterface $passwordHasher
-    ): Response {
-
+        UserPasswordHasherInterface $passwordHasher,
+        ValidatorInterface $validator
+    ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
-        $email    = $data['username'] ?? '';
+        $email    = $data['email'] ?? '';
         $password = $data['password'] ?? '';
 
         $user = new User();
@@ -28,10 +30,20 @@ class Login extends AbstractController{
         $hashedPassword = $passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashedPassword);
 
+        $errors = $validator->validate($user);
+        if (count($errors) > 0){
+            $data = array("errors" => $errors, );
+            return new JsonResponse(
+                $data,
+                Response::HTTP_CONFLICT // 409 status code
+                );
+        }
+        
+
         $em->persist($user);
         $em->flush();
 
-        return new Response('User created');
+        return new JsonResponse(['User created' => 'OK']);
     }
 }
 ?>

@@ -16,3 +16,12 @@ api_profile:            # <-- route name
     controller: App\Controller\Profile::me
     methods: [GET]      # optional but recommended to restrict the method
 
+api_registrar_usuario:
+    path: /registrar
+    controller: App\Controller\RegistrarController::nuevoUsuario
+    methods: [POST]
+
+api_mostrar_formulario_registrar:
+    path: /registrar
+    controller: App\Controller\RegistrarController::mostrarFormulario
+    methods: [GET]
