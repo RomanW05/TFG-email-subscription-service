@@ -25,3 +25,8 @@ api_mostrar_formulario_registrar:
     path: /registrar
     controller: App\Controller\RegistrarController::mostrarFormulario
     methods: [GET]
+
+get_ip:
+    path: /ip
+    controller: App\Controller\Login::get_user_data
+    methods: [GET]

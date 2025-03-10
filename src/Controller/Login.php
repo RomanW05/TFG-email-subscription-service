@@ -45,5 +45,18 @@ class Login extends AbstractController{
 
         return new JsonResponse(['User created' => 'OK']);
     }
+
+    public function get_user_data(Request $request): JsonResponse {
+        $ip = $request->getClientIp();
+        echo "The ip is: ". $ip. '
+        ';
+        echo $_SERVER['HTTP_USER_AGENT'].'
+        ';
+        $data = ['ip' => $ip];
+        return new JsonResponse(
+            $data,
+            Response::HTTP_OK
+            );
+    }
 }
 ?>
