@@ -18,22 +18,11 @@ class RegistrarController extends AbstractController{
         EntityManagerInterface $em,
         UserPasswordHasherInterface $passwordHasher,
     ): Response  {
-        // $data = json_decode($request->getContent(), true);
-
-        // $email    = $data['email'] ?? '';
-        // $password = $data['password'] ?? '';
-
         $user = new User();
-        // $user->setEmail($email);
-
-        // // using the recommended Symfony password hasher:
-        // $hashedPassword = $passwordHasher->hashPassword($user, $password);
-        // $user->setPassword($hashedPassword);
-
         $form = $this->createForm(RegistrarType::class, $user);
         $form->handleRequest($request);
 
-        
+        // isset($_POST['submit']);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('password')->getData();
@@ -43,45 +32,28 @@ class RegistrarController extends AbstractController{
             $existingUser = $em->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
             if ($existingUser) {
                 $this->addFlash('error', 'User with this email already exists');
-                return new JsonResponse(["Existing user" => 'Not registered']);
+                return new JsonResponse(["El usuario ya existe" => 'No se ha registrado']);
             }
-            
-            // Save user to database
+
             $em->persist($user);
             $em->flush();
-            
             $this->addFlash('success', 'User created successfully');
-            // return $this->redirectToRoute('some_success_page');
-            return new JsonResponse(["All good" => 'OK']);
+            $response = ["Nuevo usuario registrado correctamente" => 'OK'];
+
+            return new JsonResponse($response, Response::HTTP_CREATED);
         }
         else {
             $errors = [];
-    foreach ($form->getErrors(true) as $error) {
-        $errors[] = $error->getMessage();
-    }
-    
-    // For field-specific errors
-    foreach ($form->all() as $childForm) {
-        $childName = $childForm->getName();
-        if ($childForm->getErrors()->count() > 0) {
-            $childErrors = [];
-            foreach ($childForm->getErrors() as $error) {
-                $childErrors[] = $error->getMessage();
+            foreach ($form->getErrors(true) as $error) {
+                $errors[] = $error->getMessage();
             }
-            $errors[$childName] = $childErrors;
-        }
-    }
-    
-    return new JsonResponse(['errors' => $errors], Response::HTTP_BAD_REQUEST);
+            $response = ['errors' => $errors];
+
+            return new JsonResponse($response, Response::HTTP_BAD_REQUEST);
         };
-
-
-        return new JsonResponse(['User NOT created' => 'BUUU']);
     }
 
-    public function mostrarFormulario(
-        Request $request,
-    ): Response {
+    public function mostrarFormulario(): Response {
         $user = new User();
         $form = $this->createForm(RegistrarType::class, $user);
         return $this->render('registrar/formulario.html.twig', [

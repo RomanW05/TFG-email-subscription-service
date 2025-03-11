@@ -18,32 +18,32 @@ class Login extends AbstractController{
         UserPasswordHasherInterface $passwordHasher,
         ValidatorInterface $validator
     ): JsonResponse {
-        $data = json_decode($request->getContent(), true);
+        // $data = json_decode($request->getContent(), true);
 
-        $email    = $data['email'] ?? '';
-        $password = $data['password'] ?? '';
+        // $email    = $data['email'] ?? '';
+        // $password = $data['password'] ?? '';
 
-        $user = new User();
-        $user->setEmail($email);
+        // $user = new User();
+        // $user->setEmail($email);
 
-        // using the recommended Symfony password hasher:
-        $hashedPassword = $passwordHasher->hashPassword($user, $password);
-        $user->setPassword($hashedPassword);
+        // $hashedPassword = $passwordHasher->hashPassword($user, $password);
+        // $user->setPassword($hashedPassword);
 
-        $errors = $validator->validate($user);
-        if (count($errors) > 0){
-            $data = array("errors" => $errors, );
-            return new JsonResponse(
-                $data,
-                Response::HTTP_CONFLICT // 409 status code
-                );
-        }
-        
+        // $errors = $validator->validate($user);
+        // if (count($errors) > 0){
+        //     $reponse = array("errors" => $errors, );
+        //     return new JsonResponse(
+        //         $reponse,
+        //         Response::HTTP_CONFLICT
+        //         );
+        // }
 
-        $em->persist($user);
-        $em->flush();
+        // $em->persist($user);
+        // $em->flush();
 
-        return new JsonResponse(['User created' => 'OK']);
+        // $response = ['User created' => 'OK'];
+
+        // return new JsonResponse($response, Response::HTTP_CREATED);
     }
 }
 ?>
