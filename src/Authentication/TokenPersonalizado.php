@@ -24,5 +24,11 @@ class TokenPersonalizado{
         $jwt = $this->jwtManager->createFromPayload($subscriptor, $payload);
         return $jwt;
     }
+
+    public function decodificar_token(string $token): array
+    {
+        $data = $this->jwtManager->parse($token);
+        return $data;
+    }
 }
 ?>

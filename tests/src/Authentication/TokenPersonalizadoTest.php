@@ -65,8 +65,16 @@ final class TokenPersonalizadoTest extends KernelTestCase
     public function testDecodificarToken(): void
     {
         $tokenPersonalizado = new TokenPersonalizado($this->jwtManager);
-        
-    }
-        
+        $user1 = $this->em->getRepository(User::class)->findOneBy(['email' => 'johndoe1@test.com']);
+        $user2 = $this->em->getRepository(User::class)->findOneBy(['email' => 'johndoe2@test.com']);
+        $jwt = $tokenPersonalizado->nuevo_token($user1, $user2);
+        $decoded_jwt = $tokenPersonalizado->decodificar_token($jwt);
+
+        $this->assertTrue(array_key_exists('iat', $decoded_jwt));
+        $this->assertTrue(array_key_exists('exp', $decoded_jwt));
+        $this->assertTrue(array_key_exists('roles', $decoded_jwt));
+        $this->assertTrue(array_key_exists('id_cliente', $decoded_jwt));
+        $this->assertTrue(array_key_exists('username', $decoded_jwt));
+    } 
 }
 ?>
