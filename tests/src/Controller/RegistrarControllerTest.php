@@ -33,11 +33,13 @@ final class RegistrarControllerTest extends WebTestCase
 
     public function testCreateNewUser(): void
     {
-        $crawler = $this->client->request('GET', '/registrar');
-        $form = $crawler->filter('form[name="registrar"]')->form();
+        // $crawler = $this->client->request('GET', '/registrar');
+        $form = $this->createForm(RegistrarType::class, $user);
+        // $form = $crawler->filter('form[name="registrar"]')->form();
         $form['registrar[email]'] = 'johndoe@gmail.com';
         $form['registrar[password]'] = '123';
         $this->client->submit($form);
+        $this->assertResponseIsSuccessful();
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => 'johndoe@gmail.com']);
         $this->assertNotNull($user, 'User should be created');
     }

@@ -1,14 +1,9 @@
 api_login_check:
     path: /api/login_check
 
-custom_token:
-    path: /login/custom_token
-    controller: App\Controller\Login::CustomInformationToken
-    methods: [GET]
-
 api_profile:
     path: /api/profile
-    controller: App\Controller\Profile::me
+    controller: App\Controller\Profile::mostrarCliente
     methods: [GET]
 
 api_registrar_usuario:

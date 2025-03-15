@@ -22,8 +22,6 @@ class RegistrarController extends AbstractController{
         $form = $this->createForm(RegistrarType::class, $user);
         $form->handleRequest($request);
 
-        // isset($_POST['submit']);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('password')->getData();
             $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
