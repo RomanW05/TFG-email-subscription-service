@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
 class EnviarCorreo {
     public function __construct(private EntityManagerInterface $em, private LoggerInterface $logger) {}
 
-    public function enviar(Subscriptores $subscriptor, $email_cliente, $plantilla_id, $nombre_campana, $asunto, $cuerpo){
+    public function enviar(Subscriptores $subscriptor, $email_cliente, $plantilla_id, $nombre_campana, $asunto, $cuerpo): bool{
         $mail = new PHPMailer(true);
 
         try {
@@ -36,12 +36,14 @@ class EnviarCorreo {
 
             $mail->send();
             $this->nuevo_registro_correo($plantilla_id, $subscriptor->getId(), true);
+            return true;
         } catch (Exception $e) {
             $this->nuevo_registro_correo($plantilla_id, $subscriptor->getId(), false);
             $this->logger->error(sprintf(
                 'Error sending mail: Mailer ErrorInfo: "%s" | Exception message: "%s"',
                 $mail->ErrorInfo,
                 $e->getMessage()));
+                return false;
         };
     }
 
