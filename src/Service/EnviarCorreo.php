@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
 class EnviarCorreo {
     public function __construct(private EntityManagerInterface $em, private LoggerInterface $logger) {}
 
-    public function enviarCorreo($subscriptor, $email_cliente, $plantilla_id, $nombre_campana, $asunto, $cuerpo){
+    public function enviar(Subscriptores $subscriptor, $email_cliente, $plantilla_id, $nombre_campana, $asunto, $cuerpo){
         $mail = new PHPMailer(true);
 
         try {
