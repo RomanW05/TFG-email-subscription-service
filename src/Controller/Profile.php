@@ -3,14 +3,12 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 class Profile extends AbstractController
 {
-    public function me(): JsonResponse
+    public function mostrarCliente(): JsonResponse
     {
-        // getUser() returns the *fully authenticated* User object
         $user = $this->getUser();
 
         if (!$user) {
@@ -20,12 +18,12 @@ class Profile extends AbstractController
             );
         }
 
-        // Return only the data you need, e.g. ID, email, username, roles, etc.
-        // Adjust to your entity’s actual getters.
-        return $this->json([
+        $data = [
             'id'    => $user->getId(),
             'email' => $user->getEmail(),
-            'roles' => $user->getRoles(),
-        ]);
+            'roles' => $user->getRoles()
+        ];
+
+        return new JsonResponse([$data, Response::HTTP_OK]);
     }
 }

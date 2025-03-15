@@ -1,18 +1,17 @@
 api_login_check:
     path: /api/login_check
 
-create_new_user:
-    path: /login/create_new_user
-    controller: App\Controller\Login::CreateUserAction
-    methods: [POST]
-
-custom_token:
-    path: /login/custom_token
-    controller: App\Controller\Login::CustomInformationToken
+api_profile:
+    path: /api/profile
+    controller: App\Controller\Profile::mostrarCliente
     methods: [GET]
 
-api_profile:            # <-- route name
-    path: /api/profile  # <-- the path users will hit in the browser/client
-    controller: App\Controller\Profile::me
-    methods: [GET]      # optional but recommended to restrict the method
+api_registrar_usuario:
+    path: /registrar
+    controller: App\Controller\RegistrarController::nuevoUsuario
+    methods: [POST]
 
+api_mostrar_formulario_registrar:
+    path: /registrar
+    controller: App\Controller\RegistrarController::mostrarFormulario
+    methods: [GET]
