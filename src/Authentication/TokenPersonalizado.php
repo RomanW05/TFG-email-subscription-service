@@ -30,5 +30,16 @@ class TokenPersonalizado{
         $data = $this->jwtManager->parse($token);
         return $data;
     }
+
+    public function validar_token(string $token): bool
+    {
+        $decoded_jwt = $this->decodificar_token($token);
+        if ($decoded_jwt['exp'] <= time()){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
 }
 ?>

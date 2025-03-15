@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final class TokenPersonalizadoTest extends KernelTestCase
 {
@@ -42,7 +41,6 @@ final class TokenPersonalizadoTest extends KernelTestCase
         }
     }
 
-
     public function testNuevoToken(): void
     {
         $tokenPersonalizado = new TokenPersonalizado($this->jwtManager);
@@ -75,6 +73,17 @@ final class TokenPersonalizadoTest extends KernelTestCase
         $this->assertTrue(array_key_exists('roles', $decoded_jwt));
         $this->assertTrue(array_key_exists('id_cliente', $decoded_jwt));
         $this->assertTrue(array_key_exists('username', $decoded_jwt));
-    } 
+    }
+
+    public function testValidarToken(): void
+    {
+        $tokenPersonalizado = new TokenPersonalizado($this->jwtManager);
+        $user1 = $this->em->getRepository(User::class)->findOneBy(['email' => 'johndoe1@test.com']);
+        $user2 = $this->em->getRepository(User::class)->findOneBy(['email' => 'johndoe2@test.com']);
+        $jwt = $tokenPersonalizado->nuevo_token($user1, $user2);
+        
+        $token_valido = $tokenPersonalizado->validar_token($jwt);
+        $this->assertTrue($token_valido, true);
+    }
 }
 ?>
