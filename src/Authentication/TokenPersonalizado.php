@@ -17,7 +17,6 @@ class TokenPersonalizado{
 
     public function nuevo_token(User $cliente, User $subscriptor): String
     {
-        $email = $subscriptor->getEmail();
         $fecha_caducidad = time() + 3600;
         $id_cliente = $cliente->getId();
         $payload = [
