@@ -32,7 +32,7 @@ class EnviarCorreo {
 
             $mail->Subject = $asunto;
             $mail->Body    = $cuerpo;
-            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+            $mail->AltBody = new \Html2Text\Html2Text($cuerpo);
 
             $mail->send();
             $this->nuevo_registro_correo($plantilla_id, $subscriptor->getId(), true);
